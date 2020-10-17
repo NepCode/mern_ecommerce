@@ -6,7 +6,7 @@ import { useFetch } from '../hooks/useFetch'
 
 const HomeScreen = () => {
 
-    const { data , loading } = useFetch(`http://localhost:5000/api/v1/products`)
+    const { data : products , loading } = useFetch(`http://localhost:5000/api/v1/products`)
 
     return (
         <>
@@ -23,7 +23,7 @@ const HomeScreen = () => {
                 <>
                     <h1>latest products</h1>
                     <Row>
-                        { data.map((product) => (
+                        { products.map((product) => (
                         <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                             <Product product={product} />
                         </Col>
@@ -32,9 +32,6 @@ const HomeScreen = () => {
                 </>
                 )
             }
-
-            
-            
         </>
     )
 }
