@@ -4,17 +4,21 @@ import { Link } from 'react-router-dom'
 import { Rating } from './Rating';
 
 export const Product = ({ product }) => {
+    
+    let link = ``
+    product._id ? link = `/product/${product._id}` : link = `/product/${product.id}`
+
     return (
         <Card className='my-3 p-3 rounded'>
-        <Link to={`/product/${product._id}`}>
+        <Link to={`${link}`}>
           <Card.Img src={product.image} variant='top' />
         </Link>
   
         <Card.Body>
-            <Link to={`/product/${product._id}`}>
-            <Card.Title as='div'>
-                <strong>{product.name}</strong>
-            </Card.Title>
+            <Link to={`${link}`}>
+              <Card.Title as='div'>
+                  <strong>{product.name}</strong>
+              </Card.Title>
             </Link>
 
             <Card.Text as='div'>
