@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Col, Row } from 'react-bootstrap';
 import { Product } from '../components/Product';
+import { Message } from '../components/Message';
+import { Loader } from '../components/Loader';
 //import products from "../products";
 //import { useFetch } from '../hooks/useFetch'
 
@@ -26,15 +28,13 @@ const HomeScreen = () => {
 
             { loading ?
                 ( 
-                    <h1 className="text-center">
-                    Loading ...
-                    </h1>
+                    <Loader/>
                 )
                 : error ?
                 (
-                    <h1 className="text-center">
+                    <Message variant={'danger'}>
                     {error}
-                    </h1>
+                    </Message>
                 )
                 :
                 (   
