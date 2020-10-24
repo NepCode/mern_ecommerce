@@ -6,8 +6,8 @@ import { useFetch } from '../hooks/useFetch'
 
 const HomeScreen = () => {
 
-    const { data : products , loading } = useFetch(`http://localhost:5000/api/v1/products`)
-    //const { data : products , loading } = useFetch(`https://localhost:44372/api/v1/products`)
+    //const { data : products , loading } = useFetch(`http://localhost:5000/api/v1/products`)
+    const { data : products , loading } = useFetch(`https://localhost:44372/api/v1/products`)
 
     return (
         <>

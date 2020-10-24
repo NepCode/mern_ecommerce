@@ -9,8 +9,8 @@ import { useFetch } from '../hooks/useFetch'
 export const ProductScreen = ({ match }) => {
 
     //const product = products.find( p => p._id === match.params.id )
-    const { data : product , loading } = useFetch(`http://localhost:5000/api/v1/products/${match.params.id }`)
-    //const { data : product , loading } = useFetch(`https://localhost:44372/api/v1/products/${match.params.id }`)
+    //const { data : product , loading } = useFetch(`http://localhost:5000/api/v1/products/${match.params.id }`)
+    const { data : product , loading } = useFetch(`https://localhost:44372/api/v1/products/${match.params.id }`)
 
     return (
 
