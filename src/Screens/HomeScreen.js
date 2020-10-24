@@ -1,22 +1,39 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+
 import { Col, Row } from 'react-bootstrap';
 import { Product } from '../components/Product';
 //import products from "../products";
-import { useFetch } from '../hooks/useFetch'
+//import { useFetch } from '../hooks/useFetch'
+
+import { listProducts } from "../actions/productActions";
 
 const HomeScreen = () => {
 
-    //const { data : products , loading } = useFetch(`http://localhost:5000/api/v1/products`)
-    const { data : products , loading } = useFetch(`https://localhost:44372/api/v1/products`)
+    //const { data : products , loading } = useFetch(`${process.env.REACT_APP_API_URL}products`)
+
+    const dispatch = useDispatch()
+    const productList = useSelector( state => state.productList );
+    const { loading, error, products } = productList;
+
+    useEffect(() => {
+        dispatch(listProducts())
+     }, [dispatch])
+
 
     return (
         <>
 
-            { loading
-                ?
+            { loading ?
                 ( 
                     <h1 className="text-center">
                     Loading ...
+                    </h1>
+                )
+                : error ?
+                (
+                    <h1 className="text-center">
+                    {error}
                     </h1>
                 )
                 :
