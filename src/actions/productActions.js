@@ -21,6 +21,17 @@ export const listProducts = () => {
 } 
 
 
-export const hello = () => () => {
+export const listProductDetails = (id) => async (dispatch) => {
+
+    try {
+        dispatch({  type: types.PRODUCT_DETAILS_REQUEST });
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products/${id}`)
+        dispatch({ type: types.PRODUCT_DETAILS_SUCCESS, payload : data });
+    } catch (e) {
+        dispatch({
+            type : types.PRODUCT_DETAILS_FAIL,
+            payload : e.message
+        })
+    }
 
 }

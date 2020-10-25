@@ -1,16 +1,32 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Button } from "react-bootstrap";
 import { Rating } from '../components/Rating';
 import { Product } from '../components/Product';
 //import products from '../products';
-import { useFetch } from '../hooks/useFetch'
+//import { useFetch } from '../hooks/useFetch'
+import { Loader } from '../components/Loader';
+import { Message } from '../components/Message';
+
+import { listProductDetails } from "../actions/productActions";
+
 
 export const ProductScreen = ({ match }) => {
 
     //const product = products.find( p => p._id === match.params.id )
     //const { data : product , loading } = useFetch(`http://localhost:5000/api/v1/products/${match.params.id }`)
-    const { data : product , loading } = useFetch(`https://localhost:44372/api/v1/products/${match.params.id }`)
+    //const { data : product , loading } = useFetch(`https://localhost:44372/api/v1/products/${match.params.id }`)
+
+    const dispatch = useDispatch()
+    const productDetails = useSelector( state => state.productDetails );
+    const { loading, error, product } = productDetails;
+
+    useEffect(() => {
+        dispatch(listProductDetails(match.params.id))
+    }, [dispatch, match])
+
 
     return (
 
@@ -19,9 +35,13 @@ export const ProductScreen = ({ match }) => {
         { loading
             ?
             (
-                <h1 className="text-center">
-                Loading ...
-                </h1>
+                <Loader/>
+            )
+            : error ?
+            (
+                <Message variant={'danger'}>
+                {error}
+                </Message>
             )  
             :
             (
