@@ -18,19 +18,19 @@ export const productListReducer = ( state = initialState , action ) => {
 
     switch ( action.type ) {
 
-        case types.PRODUCT_LIST_REQUEST:
+        case types.productTypes.PRODUCT_LIST_REQUEST:
             return {
                 products: [],
                 loading: true
             }
 
-        case types.PRODUCT_LIST_SUCCESS:
+        case types.productTypes.PRODUCT_LIST_SUCCESS:
             return {
                 products: action.payload,
                 loading: false
             }
 
-        case types.PRODUCT_LIST_FAIL:
+        case types.productTypes.PRODUCT_LIST_FAIL:
             return {
                 loading: false,
                 error: action.payload
@@ -47,19 +47,19 @@ export const productDetailsReducer = ( state = initialState , action ) => {
 
     switch ( action.type ) {
 
-        case types.PRODUCT_DETAILS_REQUEST:
+        case types.productTypes.PRODUCT_DETAILS_REQUEST:
             return {
                 loading : true,
                 ...state
             }
 
-        case types.PRODUCT_DETAILS_SUCCESS:
+        case types.productTypes.PRODUCT_DETAILS_SUCCESS:
             return {
                 product : action.payload,
                 loading : false
             }
 
-        case types.PRODUCT_DETAILS_FAIL:
+        case types.productTypes.PRODUCT_DETAILS_FAIL:
             return {
                 loading : false,
                 product : {},
