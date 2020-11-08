@@ -65,3 +65,34 @@ export const register = ( email, password ) => async ( dispatch ) => {
 
 }
  
+export const getUserDetails = ( id ) => async ( dispatch, getState ) => {
+       
+    try {
+        dispatch({  type: types.userTypes.USER_DETAILS_REQUEST});
+
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers : {
+               
+                 Authorization: `Bearer ${userInfo.token}`,
+            }
+        }
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}auth/profile`, config )
+        dispatch({ type: types.userTypes.USER_DETAILS_SUCCESS , payload : data });
+    } catch (e) {
+
+        if (e.response.status === 400) {
+            dispatch({
+                type : types.userTypes.USER_DETAILS_FAIL,
+                payload : e.response.data.message
+            })
+        } else {
+
+            dispatch({
+                type : types.userTypes.USER_DETAILS_FAIL,
+                payload : e.message
+            })
+        }
+    }
+
+}
