@@ -9,7 +9,8 @@ import { useForm } from '../../hooks/useForm'
 import {Message} from '../../components/Message'
 import {Loader} from '../../components/Loader'
 
-import { getUserDetails } from '../../actions/userActions'
+import { getUserDetails, updateUserProfile } from '../../actions/userActions'
+import { types } from "../../types/types";
 
 
 
@@ -25,8 +26,12 @@ export const ProfileScreen = ({ location, history }) => {
     const userLogin = useSelector((state) => state.userLogin)
     const { userInfo } = userLogin
 
+    const userUpdateProfile  = useSelector((state) => state.userUpdateProfile)
+    const { success } = userUpdateProfile 
+
 
     const [registerFormValues, handleInputChange, setInputValues ] = useForm({
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -34,14 +39,19 @@ export const ProfileScreen = ({ location, history }) => {
 
     const [message, setMessage] = useState(null)
 
-    const { email, password, confirmPassword } = registerFormValues;
+    const { name, email, password, confirmPassword } = registerFormValues;
 
     const submitHandler = (e) => {
         e.preventDefault()
         if(password !== confirmPassword) {
           setMessage('Passwords do not match')
         } else {
-          //DISPATCH UPDATE PROFILE
+          dispatch( updateUserProfile({
+              id: user._id,
+              name,
+              email,
+              password
+          }))
         }
     }
 
@@ -50,17 +60,19 @@ export const ProfileScreen = ({ location, history }) => {
         if (!userInfo) {
           history.push('/login')
         } else {
-            if(!user.email) {
+            if( !user || !user.email || success ) {
+                dispatch( {type: types.userTypes.USER_UPDATE_PROFILE_RESET} )
                 dispatch(getUserDetails('profile'))
             } else {
                 setInputValues(
                     { ...registerFormValues,
+                        name : user.name,
                         email : user.email
                     })
             }
         }
         // eslint-disable-next-line
-    }, [ dispatch, history, userInfo, user])
+    }, [ dispatch, history, userInfo, user, success])
 
 
     return (
@@ -72,9 +84,23 @@ export const ProfileScreen = ({ location, history }) => {
 
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
+                {success && <Message variant='success'>Profile Updated</Message>}
                 {loading && <Loader />}
 
                 <Form onSubmit={submitHandler}>
+
+                <Form.Group controlId='name'>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                    name='name'
+                    type='text'
+                    placeholder='Enter your name'
+                    value={name}
+                    onChange={ handleInputChange }
+                    >
+                    </Form.Control>
+                </Form.Group>
+
                 <Form.Group controlId='email'>
                     <Form.Label>Email Address</Form.Label>
                     <Form.Control

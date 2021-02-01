@@ -51,10 +51,31 @@ export const userDetailsReducer = ( state = { user : {} } , action ) => {
             return { ...state, loading: true }
 
         case types.userTypes.USER_DETAILS_SUCCESS:
-            return {  user: action.payload, loading: false }
+            return { loading: false, user: action.payload }
 
         case types.userTypes.USER_DETAILS_FAIL:
             return { loading: false, error: action.payload }
+
+        default:
+            return state;
+    }
+}
+
+export const userUpdateProfileDetailsReducer = ( state = { } , action ) => {
+
+    switch ( action.type ) {
+
+        case types.userTypes.USER_UPDATE_PROFILE_REQUEST:
+            return { ...state, loading: true }
+
+        case types.userTypes.USER_UPDATE_PROFILE_SUCCESS:
+            return { loading: false, success: true, userInfo: action.payload }
+
+        case types.userTypes.USER_UPDATE_PROFILE_FAIL:
+            return { loading: false, error: action.payload }
+
+        case types.userTypes.USER_UPDATE_PROFILE_RESET:
+            return {}
 
         default:
             return state;

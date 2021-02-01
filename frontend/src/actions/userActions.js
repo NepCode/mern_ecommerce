@@ -77,7 +77,7 @@ export const getUserDetails = ( id ) => async ( dispatch, getState ) => {
                  Authorization: `Bearer ${userInfo.token}`,
             }
         }
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}auth/profile`, config )
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}users/profile`, config )
         dispatch({ type: types.userTypes.USER_DETAILS_SUCCESS , payload : data });
     } catch (e) {
 
@@ -90,6 +90,40 @@ export const getUserDetails = ( id ) => async ( dispatch, getState ) => {
 
             dispatch({
                 type : types.userTypes.USER_DETAILS_FAIL,
+                payload : e.message
+            })
+        }
+    }
+
+}
+
+export const updateUserProfile = ( user ) => async ( dispatch, getState ) => {
+       
+    try {
+        dispatch({  type: types.userTypes.USER_UPDATE_PROFILE_REQUEST});
+
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers : {
+               
+                 Authorization: `Bearer ${userInfo.token}`,
+            }
+        }
+        const { data } = await axios.put(`${process.env.REACT_APP_API_URL}users/profile`, user,  config )
+        dispatch({ type: types.userTypes.USER_UPDATE_PROFILE_SUCCESS , payload : data });
+        dispatch({ type: types.userTypes.USER_LOGIN_SUCCESS , payload : data });
+        localStorage.setItem( 'userInfo', JSON.stringify(data) )
+    } catch (e) {
+
+        if (e.response.status === 400) {
+            dispatch({
+                type : types.userTypes.USER_UPDATE_PROFILE_FAIL,
+                payload : e.response.data.message
+            })
+        } else {
+
+            dispatch({
+                type : types.userTypes.USER_UPDATE_PROFILE_FAIL,
                 payload : e.message
             })
         }
