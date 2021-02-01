@@ -11,7 +11,7 @@ export const login = ( email, password ) => async ( dispatch ) => {
                     'Content-Type' : 'application/json'
                 }
             }
-            const { data } = await axios.post(`${process.env.REACT_APP_API_URL}auth/login`,  { email, password }, config )
+            const { data } = await axios.post(`${process.env.REACT_APP_API_URL}users/login`,  { email, password }, config )
             dispatch({ type: types.userTypes.USER_LOGIN_SUCCESS , payload : data });
 
             localStorage.setItem( 'userInfo', JSON.stringify(data) )
@@ -33,7 +33,7 @@ export const logout = ( ) => async ( dispatch ) => {
 }
 
 
-export const register = ( email, password ) => async ( dispatch ) => {
+export const register = ( name, email, password ) => async ( dispatch ) => {
        
     try {
         dispatch({  type: types.userTypes.USER_REGISTER_REQUEST});
@@ -43,7 +43,7 @@ export const register = ( email, password ) => async ( dispatch ) => {
                 'Content-Type' : 'application/json'
             }
         }
-        const { data } = await axios.post(`${process.env.REACT_APP_API_URL}auth/register`,  { email, password }, config )
+        const { data } = await axios.post(`${process.env.REACT_APP_API_URL}users/`,  { name, email, password }, config )
         dispatch({ type: types.userTypes.USER_REGISTER_SUCCESS , payload : data });
         dispatch({ type: types.userTypes.USER_LOGIN_SUCCESS , payload : data });
         localStorage.setItem( 'userInfo', JSON.stringify(data) )

@@ -26,6 +26,7 @@ export const RegisterScreen = ({ location, history }) => {
     const redirect = location.search ? location.search.split('=')[1] : '/'
 
     const [registerFormValues, handleInputChange] = useForm({
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -33,7 +34,7 @@ export const RegisterScreen = ({ location, history }) => {
 
     const [message, setMessage] = useState(null)
 
-    const { email, password, confirmPassword } = registerFormValues;
+    const { name, email, password, confirmPassword } = registerFormValues;
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -41,7 +42,7 @@ export const RegisterScreen = ({ location, history }) => {
           setMessage('Passwords do not match')
         } else {
           setMessage(null)
-          dispatch(register(email, password))
+          dispatch(register(name, email, password))
         }
     }
 
@@ -63,7 +64,20 @@ export const RegisterScreen = ({ location, history }) => {
         {loading && <Loader />}
 
         <Form onSubmit={submitHandler}>
-          <Form.Group controlId='email'>
+
+        <Form.Group controlId='name'>
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              name='name'
+              type='name'
+              placeholder='Enter your name'
+              value={name}
+              onChange={ handleInputChange }
+            >
+            </Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId='email'>
             <Form.Label>Email Address</Form.Label>
             <Form.Control
               name='email'
