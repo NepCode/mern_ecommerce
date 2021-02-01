@@ -6,6 +6,7 @@ import connectDB from './config/db.js'
 
 
 import productRoutes from './routes/productRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 
 dotenv.config()
@@ -17,6 +18,7 @@ const app = express();
 app.use(express.json())
 
 app.use('/api/v1/products', productRoutes)
+app.use('/api/v1/users', userRoutes)
 
 
 const PORT = process.env.PORT || 5000
