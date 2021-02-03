@@ -47,3 +47,14 @@ export const saveShippingAddress = ( data ) => ( dispatch, getState ) => {
 
 }
 
+
+export const savePaymentMethod = ( data ) => ( dispatch, getState ) => {
+
+    dispatch({
+        type: types.cartTypes.CART_SAVE_PAYMENT_METHOD,
+        payload: data
+    })
+
+    localStorage.setItem( 'paymentMethod', JSON.stringify( data ))
+}
+
