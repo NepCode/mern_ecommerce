@@ -2,6 +2,7 @@ import { types } from "../types/types";
 
 const initialState = {
     cartItems : [],
+    shippingAddress : {}
 }
 
 export const cartReducer = ( state = initialState, action) => {
@@ -21,16 +22,27 @@ export const cartReducer = ( state = initialState, action) => {
                 cartItems : [...state.cartItems, item]
                }
             }
-    
-        default:
-            return state
-
         
+
+
         case types.cartTypes.CART_REMOVE_ITEM:
             return {
                 ...state,
                 cartItems: state.cartItems.filter( (x) => x.product !== action.payload )
             }
+
+
+
+        case types.cartTypes.CART_SAVE_SHIPPING_ADDRESS:
+            return {
+                ...state,
+                shippingAddress: action.payload 
+            }
+
+
+
+        default:
+            return state
     }
 
 }
