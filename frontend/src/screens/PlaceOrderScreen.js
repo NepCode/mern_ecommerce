@@ -4,9 +4,8 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import {Message} from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
-//import { createOrder } from '../actions/orderActions'
-/* import { ORDER_CREATE_RESET } from '../constants/orderConstants'
-import { USER_DETAILS_RESET } from '../constants/userConstants' */
+import { createOrder } from '../actions/orderActions'
+import { types } from '../types/types'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -35,30 +34,28 @@ const PlaceOrderScreen = ({ history }) => {
     Number(cart.taxPrice)
   ).toFixed(2)
 
-  /* const orderCreate = useSelector((state) => state.orderCreate)
-  const { order, success, error } = orderCreate */
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { order, success, error } = orderCreate
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (success) {
       history.push(`/order/${order._id}`)
-      dispatch({ type: USER_DETAILS_RESET })
-      dispatch({ type: ORDER_CREATE_RESET })
     }
     // eslint-disable-next-line
-  }, [history, success]) */
+  }, [history, success])
 
   const placeOrderHandler = () => {
-   /*  dispatch(
+    dispatch(
       createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
       })
-    ) */
+    )
   }
 
   return (
@@ -163,9 +160,9 @@ const PlaceOrderScreen = ({ history }) => {
                 </Row>
               </ListGroup.Item>
 
-            {/*   <ListGroup.Item>
+              <ListGroup.Item>
                 {error && <Message variant='danger'>{error}</Message>}
-              </ListGroup.Item> */}
+              </ListGroup.Item>
 
               <ListGroup.Item>
                 <Button
