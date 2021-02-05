@@ -57,7 +57,7 @@ export const getOrderDetails = ( id ) => async ( dispatch, getState ) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`${process.env.REACT_APP_API_URL}orders/${id}` , config )
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders/${id}` , config )
         dispatch({ type: types.orderTypes.ORDER_DETAILS_SUCCESS , payload : data });
 
     } catch (e) {
