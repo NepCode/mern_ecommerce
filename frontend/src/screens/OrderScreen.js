@@ -34,10 +34,10 @@ const OrderScreen = ({ match, history }) => {
   }
   
   useEffect(() => {
-    
-    dispatch(getOrderDetails(orderId))
-    
-  }, [])
+    if(!order || order._id !== orderId) {
+        dispatch(getOrderDetails(orderId))
+    }
+  }, [order, orderId]) 
 
 
 
