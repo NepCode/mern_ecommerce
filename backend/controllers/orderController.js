@@ -3,32 +3,24 @@ import Order from '../models/orderModel.js'
 
 // @desc    Fetch all orders
 // @route   GET /api/v1/orders
-// @access  Public
+// @access  Private
 const getOrders = asyncHandler(async (req, res) => {
   const pageSize = 10
   const page = Number(req.query.pageNumber) || 1
-  const keyword = req.query.keyword
-    ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
-      }
-    : {}
 
-  const count = await Order.countDocuments({ ...keyword })
-  const products = await Order.find({ ...keyword })
+  const count = await Order.countDocuments()
+  const orders = await Order.find()
     .limit(pageSize)
     .skip(pageSize * (page - 1))
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize) })
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) })
 })
 
-// @desc    Fetch single product
-// @route   GET /api/v1/products/:id
-// @access  Public
+// @desc    Fetch single order
+// @route   GET /api/v1/orders/:id
+// @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id)
+  const order = await Order.findById(req.params.id).populate('user', 'name email')
 
   if (order) {
     res.json(order)
@@ -38,9 +30,9 @@ const getOrderById = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Create a product
-// @route   POST /api/v1/products
-// @access  Private/Admin
+// @desc    Create a order
+// @route   POST /api/v1/orders
+// @access  Private
 const createOrder = asyncHandler(async (req, res) => {
 
   const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
@@ -66,8 +58,8 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Update a product
-// @route   PUT /api/v1/products/:id
+// @desc    Update a order
+// @route   PUT /api/v1/orders/:id
 // @access  Private/Admin
 const updateOrder = asyncHandler(async (req, res) => {
   const {
@@ -99,8 +91,8 @@ const updateOrder = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Delete a product
-// @route   DELETE /api/v1/products/:id
+// @desc    Delete a order
+// @route   DELETE /api/v1/orders/:id
 // @access  Private/Admin
 const deleteOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
