@@ -76,3 +76,42 @@ export const getOrderDetails = ( id ) => async ( dispatch, getState ) => {
     }
 
 }
+
+
+
+
+
+export const payOrder = ( orderId, paymentResult ) => async ( dispatch, getState ) => {
+    
+    try {
+        dispatch({  type: types.orderTypes.ORDER_PAY_REQUEST });
+
+        const {
+            userLogin: { userInfo }
+        } = getState();
+
+        const config = {
+            headers : {
+                'Content-Type' : 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.put(`${process.env.REACT_APP_API_URL}orders/${orderId}/pay` , paymentResult, config )
+        dispatch({ type: types.orderTypes.ORDER_PAY_SUCCESS , payload : data });
+
+    } catch (e) {
+
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type: types.orderTypes.ORDER_PAY_FAIL,
+            payload: message,
+        })
+    }
+
+}
