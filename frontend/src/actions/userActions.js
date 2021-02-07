@@ -16,10 +16,12 @@ export const login = ( email, password ) => async ( dispatch ) => {
 
             localStorage.setItem( 'userInfo', JSON.stringify(data) )
         } catch (e) {
-            console.log(e)
             dispatch({
                 type : types.userTypes.USER_LOGIN_FAIL,
-                payload : e.message
+                payload:
+                    e.response && e.response.data.message
+                    ? e.response.data.message
+                    : e.message,
             })
         }
 }
@@ -51,18 +53,13 @@ export const register = ( name, email, password ) => async ( dispatch ) => {
         localStorage.setItem( 'userInfo', JSON.stringify(data) )
     } catch (e) {
 
-        if (e.response.status === 400) {
-            dispatch({
-                type : types.userTypes.USER_REGISTER_FAIL,
-                payload : e.response.data.message
-            })
-        } else {
-
-            dispatch({
-                type : types.userTypes.USER_REGISTER_FAIL,
-                payload : e.message
-            })
-        }
+        dispatch({
+            type: types.userTypes.USER_REGISTER_FAIL,
+            payload:
+              e.response && e.response.data.message
+                ? e.response.data.message
+                : e.message,
+        })
     }
 
 }
@@ -83,18 +80,17 @@ export const getUserDetails = ( id ) => async ( dispatch, getState ) => {
         dispatch({ type: types.userTypes.USER_DETAILS_SUCCESS , payload : data });
     } catch (e) {
 
-        if (e.response.status === 400) {
-            dispatch({
-                type : types.userTypes.USER_DETAILS_FAIL,
-                payload : e.response.data.message
-            })
-        } else {
-
-            dispatch({
-                type : types.userTypes.USER_DETAILS_FAIL,
-                payload : e.message
-            })
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
         }
+        dispatch({
+            type: types.userTypes.USER_DETAILS_FAIL,
+            payload: message,
+        })
     }
 
 }
@@ -117,18 +113,47 @@ export const updateUserProfile = ( user ) => async ( dispatch, getState ) => {
         localStorage.setItem( 'userInfo', JSON.stringify(data) )
     } catch (e) {
 
-        if (e.response.status === 400) {
-            dispatch({
-                type : types.userTypes.USER_UPDATE_PROFILE_FAIL,
-                payload : e.response.data.message
-            })
-        } else {
-
-            dispatch({
-                type : types.userTypes.USER_UPDATE_PROFILE_FAIL,
-                payload : e.message
-            })
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
         }
+        dispatch({
+            type: types.userTypes.USER_UPDATE_PROFILE_FAIL,
+            payload: message,
+        })
+    }
+
+}
+
+export const listUsers = (  ) => async ( dispatch, getState ) => {
+       
+    try {
+        dispatch({  type: types.userTypes.USER_LIST_REQUEST});
+
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers : {
+                 Authorization: `Bearer ${userInfo.token}`,
+            }
+        }
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}users/`, config )
+        dispatch({ type: types.userTypes.USER_LIST_SUCCESS , payload : data });
+    } catch (e) {
+
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type: types.userTypes.USER_LIST_FAIL,
+            payload: message,
+        })
     }
 
 }
