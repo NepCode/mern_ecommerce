@@ -3,13 +3,30 @@ import Order from '../models/orderModel.js'
 
 // @desc    Fetch all orders
 // @route   GET /api/v1/orders
-// @access  Private
+// @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
   const pageSize = 10
   const page = Number(req.query.pageNumber) || 1
 
   const count = await Order.countDocuments()
   const orders = await Order.find()
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) })
+})
+
+
+// @desc    Fetch logged in user orders
+// @route   GET /api/v1/orders/myorders
+// @access  Private
+const getMyOrders = asyncHandler(async (req, res) => {
+  const pageSize = 10
+
+  const page = Number(req.query.pageNumber) || 1
+
+  const count = await Order.countDocuments()
+  const orders = await Order.find({ user: req.user.id })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
 
@@ -29,6 +46,8 @@ const getOrderById = asyncHandler(async (req, res) => {
     throw new Error('Order not found')
   }
 })
+
+
 
 // @desc    Create a order
 // @route   POST /api/v1/orders
@@ -140,5 +159,6 @@ export {
   deleteOrder,
   createOrder,
   updateOrder,
-  updateOrderToPaid
+  updateOrderToPaid,
+  getMyOrders
 }

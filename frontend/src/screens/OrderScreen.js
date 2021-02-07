@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 
-import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
+import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 
 import {Message} from '../components/Message'
 import {Loader} from '../components/Loader'
@@ -71,7 +71,7 @@ const OrderScreen = ({ match, history }) => {
         setSdkReady(true)
       }
     }
-  }, [ dispatch, orderId, order, successPay ]) 
+  }, [ dispatch, orderId, order, successPay, history, userInfo ]) 
   
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult)

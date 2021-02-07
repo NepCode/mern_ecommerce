@@ -17,7 +17,7 @@ export const userLoginReducer = ( state = initialState , action ) => {
         case types.userTypes.USER_LOGIN_FAIL:
             return { loading: false, error: action.payload }
 
-        case types.userTypes.USER_LOGIN_LOGOUT:
+        case types.userTypes.USER_LOGOUT:
             return { userInfo: null }
 
         default:
@@ -55,6 +55,9 @@ export const userDetailsReducer = ( state = { user : {} } , action ) => {
 
         case types.userTypes.USER_DETAILS_FAIL:
             return { loading: false, error: action.payload }
+
+        case types.userTypes.USER_DETAILS_RESET:
+            return { user : {} }
 
         default:
             return state;
