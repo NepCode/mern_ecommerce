@@ -122,4 +122,25 @@ export const userDeleteReducer = (state = {}, action) => {
       default:
         return state
     }
-  }
+}
+
+export const userUpdateReducer = ( state = { user: {} } , action ) => {
+
+    switch ( action.type ) {
+
+        case types.userTypes.USER_UPDATE_REQUEST:
+            return { ...state, loading: true }
+
+        case types.userTypes.USER_UPDATE_SUCCESS:
+            return { loading: false, success: true }
+
+        case types.userTypes.USER_UPDATE_FAIL:
+            return { loading: false, error: action.payload }
+
+        case types.userTypes.USER_UPDATE_RESET:
+            return { user : {} }
+
+        default:
+            return state;
+    }
+}

@@ -18,6 +18,7 @@ import  PlaceOrderScreen  from './screens/PlaceOrderScreen';
 import  OrderScreen  from './screens/OrderScreen';
 import  MyOrders  from './screens/MyOrders';
 import  UserListScreen  from './screens/admin/UserListScreen';
+import  UserEditScreen  from './screens/admin/UserEditScreen';
 import  ErrorNotFound  from './components/ErrorNotFound';
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
           
           {/* admin routes */}
           <Route exact path='/usersList' component={UserListScreen} />
+          <Route exact path='/user/:id/edit' component={UserEditScreen} />
 
           {/* 404 page */}
           <Route path="*" component={ErrorNotFound} />
