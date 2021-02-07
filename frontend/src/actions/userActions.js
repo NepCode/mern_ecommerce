@@ -33,6 +33,7 @@ export const logout = ( ) => async ( dispatch ) => {
    dispatch({ type :  types.userTypes.USER_LOGOUT })
    dispatch({ type :  types.userTypes.USER_DETAILS_RESET })
    dispatch({ type :  types.orderTypes.ORDER_LIST_MY_ORDERS_RESET })
+   dispatch({ type :  types.userTypes.USER_LIST_RESET })
 
 }
 
@@ -157,3 +158,38 @@ export const listUsers = (  ) => async ( dispatch, getState ) => {
     }
 
 }
+
+export const deleteUser = (id) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: types.userTypes.USER_DELETE_REQUEST,
+      })
+  
+      const {
+        userLogin: { userInfo },
+      } = getState()
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+  
+      await axios.delete(`${process.env.REACT_APP_API_URL}users/${id}`, config )
+
+  
+      dispatch({ type: types.userTypes.USER_DELETE_SUCCESS })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: types.userTypes.USER_DELETE_FAIL,
+        payload: message,
+      })
+    }
+  }

@@ -39,20 +39,41 @@ const Header = () => {
                 </LinkContainer>
                 <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
               </NavDropdown>
-             ) :
+             ) : (
              <LinkContainer to='/login'><Nav.Link><i className="fas fa-user"></i> Sign In</Nav.Link></LinkContainer>
-             }
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+             )}
+
+            { userInfo && userInfo.isAdmin && (
+
+              <NavDropdown title="Admin" id="admin-nav-dropdown">
+
+                <LinkContainer to='/usersList'>
+                  <NavDropdown.Item>Users</NavDropdown.Item>
+                </LinkContainer>
+
+                <LinkContainer to='/productsList'>
+                  <NavDropdown.Item>Products</NavDropdown.Item>
+                </LinkContainer>
+
+                <LinkContainer to='/ordersList'>
+                  <NavDropdown.Item>Orders</NavDropdown.Item>
+                </LinkContainer>
+
+                  <NavDropdown.Item href="#action/3.2">
+                    Another action
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                  <NavDropdown.Divider />
+
+                  <NavDropdown.Item href="#action/3.4">
+                    Separated link
+                </NavDropdown.Item>
+
+              </NavDropdown>
+
+            )}
+
           </Nav>
         </Navbar.Collapse>
         </Container>

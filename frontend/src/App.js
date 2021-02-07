@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
 import Footer from "./components/Footer";
@@ -17,6 +17,7 @@ import  PaymentScreen  from './screens/PaymentScreen';
 import  PlaceOrderScreen  from './screens/PlaceOrderScreen';
 import  OrderScreen  from './screens/OrderScreen';
 import  MyOrders  from './screens/MyOrders';
+import  UserListScreen  from './screens/admin/UserListScreen';
 import  ErrorNotFound  from './components/ErrorNotFound';
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
     <Header/>
       <main className="py-3">
         <Container>
+        <Switch>
           <Route exact path='/' component={HomeScreen} />
           <Route exact path='/login' component={LoginScreen} />
           <Route exact path='/register' component={RegisterScreen} />
@@ -37,7 +39,13 @@ const App = () => {
           <Route exact path='/placeorder' component={PlaceOrderScreen} />
           <Route exact path='/order/:id' component={OrderScreen} />
           <Route exact path='/myorders' component={MyOrders} />
+          
+          {/* admin routes */}
+          <Route exact path='/usersList' component={UserListScreen} />
+
+          {/* 404 page */}
           <Route path="*" component={ErrorNotFound} />
+        </Switch>
         </Container>
       </main>
     <Footer/>

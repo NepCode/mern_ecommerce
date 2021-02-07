@@ -85,7 +85,7 @@ export const userUpdateProfileDetailsReducer = ( state = { } , action ) => {
     }
 }
 
-export const userListReducer = ( state = { users : [] }, action ) => {
+export const userListReducer = ( state = { loading : true, users : [] }, action ) => {
 
     switch (action.type) {
   
@@ -97,7 +97,28 @@ export const userListReducer = ( state = { users : [] }, action ) => {
   
       case types.userTypes.USER_LIST_FAIL:
         return {  loading: false, users: action.payload,  }
+
+      case types.userTypes.USER_LIST_RESET:
+        return {  loading: true, users: [] ,  }
   
+      default:
+        return state
+    }
+}
+
+export const userDeleteReducer = (state = {}, action) => {
+
+    switch (action.type) {
+
+      case types.userTypes.USER_DELETE_REQUEST:
+        return { loading: true }
+
+      case types.userTypes.USER_DELETE_SUCCESS:
+        return { loading: false, success: true }
+
+      case types.userTypes.USER_DELETE_FAIL:
+        return { loading: false, error: action.payload }
+
       default:
         return state
     }
