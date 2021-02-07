@@ -16,7 +16,7 @@ import { ShippingScreen } from './screens/ShippingScreen';
 import  PaymentScreen  from './screens/PaymentScreen';
 import  PlaceOrderScreen  from './screens/PlaceOrderScreen';
 import  OrderScreen  from './screens/OrderScreen';
-import  MyOrders  from './screens/MyOrders';
+import  MyOrdersScreen  from './screens/MyOrdersScreen';
 import  UserListScreen  from './screens/admin/UserListScreen';
 import  UserEditScreen  from './screens/admin/UserEditScreen';
 import  ErrorNotFound  from './components/ErrorNotFound';
@@ -39,7 +39,7 @@ const App = () => {
           <Route exact path='/payment' component={PaymentScreen} />
           <Route exact path='/placeorder' component={PlaceOrderScreen} />
           <Route exact path='/order/:id' component={OrderScreen} />
-          <Route exact path='/myorders' component={MyOrders} />
+          <Route exact path='/myorders' component={MyOrdersScreen} />
           
           {/* admin routes */}
           <Route exact path='/usersList' component={UserListScreen} />

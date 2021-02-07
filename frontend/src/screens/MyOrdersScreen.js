@@ -18,7 +18,7 @@ import { types } from "../types/types";
 
 
 
-const MyOrders = ({ location, history }) => {
+const MyOrdersScreen = ({ location, history }) => {
 
     const dispatch = useDispatch();
 
@@ -206,4 +206,4 @@ const MyOrders = ({ location, history }) => {
     )
 }
 
-export default MyOrders
+export default MyOrdersScreen
