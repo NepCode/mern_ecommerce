@@ -6,8 +6,14 @@ import User from '../models/userModel.js'
 // @route   GET /api/v1/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
+
+    const pageSize =  Number(req.query.pageSize) || 10
+    const page = Number(req.query.pageNumber) || 1
+    const count = await User.countDocuments()
     const users = await User.find({})
-    res.json(users)
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
+    res.json( { users, page, pages: Math.ceil(count/pageSize) } )
 })
 
 // @desc    Get user by ID
