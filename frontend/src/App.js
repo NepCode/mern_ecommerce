@@ -17,6 +17,7 @@ import  PaymentScreen  from './screens/PaymentScreen';
 import  PlaceOrderScreen  from './screens/PlaceOrderScreen';
 import  OrderScreen  from './screens/OrderScreen';
 import  MyOrders  from './screens/MyOrders';
+import  ErrorNotFound  from './components/ErrorNotFound';
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route exact path='/placeorder' component={PlaceOrderScreen} />
           <Route exact path='/order/:id' component={OrderScreen} />
           <Route exact path='/myorders' component={MyOrders} />
+          <Route path="*" component={ErrorNotFound} />
         </Container>
       </main>
     <Footer/>
