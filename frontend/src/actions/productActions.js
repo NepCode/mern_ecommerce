@@ -10,7 +10,15 @@ export const listProducts = () => {
             const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products`)
             dispatch({ type: types.productTypes.PRODUCT_LIST_SUCCESS, payload : data });
         } catch (e) {
-            console.log(e)
+         
+            const message =
+                e.response && e.response.data.message
+                ? e.response.data.message
+                : e.message
+
+            if (message === 'Not authorized, token failed') {
+                //dispatch(logout())
+            }
             dispatch({
                 type : types.productTypes.PRODUCT_LIST_FAIL,
                 payload : e
