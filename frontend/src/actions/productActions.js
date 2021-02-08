@@ -1,5 +1,6 @@
 import { types } from "../types/types";
 import axios from "axios";
+import { logout } from "./userActions";
 
 export const listProducts = () => {
 
@@ -17,7 +18,7 @@ export const listProducts = () => {
                 : e.message
 
             if (message === 'Not authorized, token failed') {
-                //dispatch(logout())
+                dispatch(logout())
             }
             dispatch({
                 type : types.productTypes.PRODUCT_LIST_FAIL,
@@ -42,4 +43,83 @@ export const listProductDetails = (id) => async (dispatch) => {
         })
     }
 
+}
+
+
+export const createProduct = () => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: types.productTypes.PRODUCT_CREATE_REQUEST,
+      })
+  
+      const {
+        userLogin: { userInfo },
+      } = getState()
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+  
+      const  {data}  = await axios.post(`${process.env.REACT_APP_API_URL}products/`, {}, config )
+  
+      dispatch({
+        type: types.productTypes.PRODUCT_CREATE_SUCCESS,
+        payload: data.data,
+      })
+    } catch (e) {
+
+        const message =
+        e.response && e.response.data.message
+        ? e.response.data.message
+        : e.message
+
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type : types.productTypes.PRODUCT_LIST_FAIL,
+            payload : e
+        })
+    }
+}
+
+
+export const deleteProduct = ( id ) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: types.productTypes.PRODUCT_DELETE_REQUEST,
+      })
+  
+      const {
+        userLogin: { userInfo },
+      } = getState()
+  
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+  
+      await axios.delete(`${process.env.REACT_APP_API_URL}products/${id}`, config )
+  
+      dispatch({
+        type: types.productTypes.PRODUCT_DELETE_SUCCESS
+      })
+    } catch (e) {
+     
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type : types.productTypes.PRODUCT_DELETE_FAIL,
+            payload : e
+        })
+    }
 }
