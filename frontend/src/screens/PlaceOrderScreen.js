@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {Message} from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
+import { types } from "../types/types";
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -39,6 +40,7 @@ const PlaceOrderScreen = ({ history }) => {
   useEffect(() => {
     if (success) {
       history.push(`/order/${order._id}`)
+      dispatch({ type: types.orderTypes.ORDER_CREATE_RESET })
     }
     // eslint-disable-next-line
   }, [history, success])
