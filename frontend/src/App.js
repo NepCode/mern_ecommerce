@@ -20,6 +20,7 @@ import  MyOrdersScreen  from './screens/MyOrdersScreen';
 import  UserListScreen  from './screens/admin/UserListScreen';
 import  UserEditScreen  from './screens/admin/UserEditScreen';
 import  ProductListScreen  from './screens/admin/ProductListScreen';
+import  ProductEditScreen  from './screens/admin/ProductEditScreen';
 import  ErrorNotFound  from './components/ErrorNotFound';
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
           <Route exact path='/usersList' component={UserListScreen} />
           <Route exact path='/user/:id/edit' component={UserEditScreen} />
           <Route exact path='/productsList' component={ProductListScreen} />
+          <Route exact path='/admin/product/:id/edit' component={ProductEditScreen} />
 
           {/* 404 page */}
           <Route path="*" component={ErrorNotFound} />

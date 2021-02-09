@@ -62,11 +62,11 @@ export const createProduct = () => async (dispatch, getState) => {
         },
       }
   
-      const  {data}  = await axios.post(`${process.env.REACT_APP_API_URL}products/`, {}, config )
+      const  { data }  = await axios.post(`${process.env.REACT_APP_API_URL}products/`, {}, config )
   
       dispatch({
         type: types.productTypes.PRODUCT_CREATE_SUCCESS,
-        payload: data.data,
+        payload: data,
       })
     } catch (e) {
 
@@ -79,7 +79,7 @@ export const createProduct = () => async (dispatch, getState) => {
             dispatch(logout())
         }
         dispatch({
-            type : types.productTypes.PRODUCT_LIST_FAIL,
+            type : types.productTypes.PRODUCT_CREATE_FAIL,
             payload : e
         })
     }
@@ -122,4 +122,45 @@ export const deleteProduct = ( id ) => async (dispatch, getState) => {
             payload : e
         })
     }
+}
+
+
+export const updateProduct = ( product ) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: types.productTypes.PRODUCT_UPDATE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type' : 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const  { data }  = await axios.put(`${process.env.REACT_APP_API_URL}products/${product._id}`,  product , config )
+
+    dispatch({
+      type: types.productTypes.PRODUCT_UPDATE_SUCCESS,
+      payload: data,
+    })
+  } catch (e) {
+
+      const message =
+      e.response && e.response.data.message
+      ? e.response.data.message
+      : e.message
+
+      if (message === 'Not authorized, token failed') {
+          dispatch(logout())
+      }
+      dispatch({
+          type : types.productTypes.PRODUCT_UPDATE_FAIL,
+          payload : e
+      })
+  }
 }
