@@ -39,6 +39,7 @@ const ProductEditScreen = ({ match, history }) => {
       if (userInfo && userInfo.isAdmin) {
           if (successUpdate) {
               dispatch({ type: types.productTypes.PRODUCT_UPDATE_RESET })
+              dispatch({ type: types.productTypes.PRODUCT_DETAILS_RESET })
               history.push('/productsList')
               } else {
                   if (!product.name || product._id !== productId) {
