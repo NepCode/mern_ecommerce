@@ -20,7 +20,13 @@ import {
     userDeleteReducer,
     userUpdateReducer
 } from "../reducers/userReducers";
-import { orderCreateReducer, orderDetailsReducer, orderPayReducer, ordersListMyReducer } from "../reducers/orderReducers";
+import { 
+    orderCreateReducer, 
+    orderDetailsReducer, 
+    orderPayReducer, 
+    ordersListMyReducer,
+    orderListReducer
+} from "../reducers/orderReducers";
 
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
@@ -43,6 +49,7 @@ const reducers = combineReducers({
     orderDetails : orderDetailsReducer,
     orderPay : orderPayReducer,
     orderMyList : ordersListMyReducer,
+    orderList : orderListReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []

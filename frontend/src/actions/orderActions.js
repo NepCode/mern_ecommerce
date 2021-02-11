@@ -151,3 +151,40 @@ export const getMyOrders = (  ) => async ( dispatch, getState ) => {
     }
 
 }
+
+
+
+
+export const listOrders = (  ) => async ( dispatch, getState ) => {
+    
+    try {
+        dispatch({  type: types.orderTypes.ORDER_LIST_REQUEST });
+
+        const {
+            userLogin: { userInfo }
+        } = getState();
+
+        const config = {
+            headers : {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders`, config )
+        dispatch({ type: types.orderTypes.ORDER_LIST_SUCCESS , payload : data });
+
+    } catch (e) {
+
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type: types.orderTypes.ORDER_LIST_FAIL,
+            payload: message,
+        })
+    }
+
+}
