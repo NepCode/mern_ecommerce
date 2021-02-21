@@ -5,8 +5,16 @@ import Product from '../models/productModel.js'
 // @route   GET /api/v1/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 10
+  const pageSize = Number(req.query.pageSize) || 10
   const page = Number(req.query.pageNumber) || 1
+  let limit = pageSize
+  let skip = pageSize * (page - 1)
+
+  if (req.query.limit && req.query.skip) {
+    limit = Number(req.query.limit)
+    skip = Number(req.query.skip)
+  }
+
   const keyword = req.query.keyword
     ? {
         name: {
@@ -18,10 +26,10 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
+    .limit(limit)
+    .skip(skip)
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize) })
+  res.json({ products, page, pages: Math.ceil(count / pageSize), count })
 })
 
 // @desc    Fetch single product
