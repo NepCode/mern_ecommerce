@@ -66,7 +66,7 @@ export const ProductScreen = ({ history, match }) => {
                         <ListGroup>
 
                             <ListGroup.Item>
-                                <h3>{Product.name}</h3>
+                                <h3>{product.name}</h3>
                             </ListGroup.Item>
 
                             <ListGroup.Item>
@@ -78,7 +78,7 @@ export const ProductScreen = ({ history, match }) => {
                             </ListGroup.Item>
 
                             <ListGroup.Item>
-                                Description: ${product.description}
+                                Description: {product.description}
                             </ListGroup.Item>
 
                         </ListGroup>
