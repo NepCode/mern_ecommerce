@@ -15,17 +15,30 @@ const getProducts = asyncHandler(async (req, res) => {
     skip = Number(req.query.skip)
   }
 
-  const keyword = req.query.keyword
+  //console.log(req.query.keyword)
+  /* const keyword = req.query.keyword
     ? {
         name: {
           $regex: req.query.keyword,
           $options: 'i',
         },
       }
-    : {}
+    : {} */
 
-  const count = await Product.countDocuments({ ...keyword })
-  const products = await Product.find({ ...keyword })
+  
+  /* const filterBy = JSON.parse(req.query.filterBy)[0].value
+    ? 
+      {
+      name: {
+          $regex: JSON.parse(req.query.filterBy)[0].value,
+          $options: 'i',
+        },
+      }
+    : {}
+    
+  console.log(filterBy, 'fileter') */
+  const count = await Product.countDocuments({ /* ...filterBy */ })
+  const products = await Product.find({ /* ...filterBy */ })
     .limit(limit)
     .skip(skip)
 
