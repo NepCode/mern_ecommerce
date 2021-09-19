@@ -1,24 +1,23 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import {Message} from '../../components/Message'
+import {ModalS} from '../../components/Modal'
 import {Loader} from '../../components/Loader'
 import { listProducts, deleteProduct, createProduct } from '../../actions/productActions'
+import { ShowModal, HideModal } from '../../actions/modalActions'
 import { types } from "../../types/types";
-import ReactDataGrid from '@inovua/reactdatagrid-community'
-//import '@inovua/reactdatagrid-community/index.css'
-import '@inovua/reactdatagrid-community/base.css'
-import '@inovua/reactdatagrid-community/theme/default-light.css'
+
+import Pagination from "@material-ui/lab/Pagination";
 
 const UserListScreen = ({ history }) => {
-
-  //const [dataSource, setDataSource] = useState([]);   
 
   const dispatch = useDispatch()
 
   const productList = useSelector((state) => state.productList)
   const { loading, error, products } = productList
+  console.log(products)
 
   const productDelete = useSelector((state) => state.productDelete)
   const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
@@ -30,62 +29,6 @@ const UserListScreen = ({ history }) => {
   const { userInfo } = userLogin
 
 
-  /* reactdatagrid */
-  const gridStyle = { minHeight: 550, marginTop: 10 }
-  const columns = [
-    { name: '_id', header: 'ID', defaultVisible: false, minWidth: 150 },
-    { name: 'name', defaultFlex: 1, header: 'Name' },
-    { name: 'price', defaultFlex: 1, header: ' Price', type: 'number' },
-    { name: 'brand', defaultFlex: 1, header: 'Brand' },
-    { name: 'category', groupBy: false, defaultFlex: 1, header: 'Category' },
-    {
-        name: 'actions', header: 'Actions', minWidth: 80, sortable: false,
-        render: ({data}) => {
-            return <>
-                <LinkContainer to={`/admin/product/${data._id}/edit`}>
-                    <Button variant='light' className='btn-sm'>
-                    <i className='fas fa-edit'></i>
-                    </Button>
-                </LinkContainer> 
-                <Button
-                    variant='danger'
-                    className='btn-sm'
-                    onClick={() => deleteHandler(data._id)}
-                    >
-                    <i className='fas fa-trash'></i>
-                </Button> 
-            </> 
-        }
-    }
-  ]
-  const filterValue = [
-    { name: 'name', operator: 'contains', type: 'string', value: '' }
-  ];
-  
-  const loadData = ({ skip, limit, sortInfo, groupBy, filterValue }) => {
-    console.log(JSON.stringify(filterValue))
-    //dispatch({  type: types.productTypes.PRODUCT_LIST_REQUEST })
-    //DATASET_URL + '?skip='+skip+'&limit='+limit+(groupBy && groupBy.length?'&groupBy='+groupBy:'')+'&sortInfo='+JSON.stringify(sortInfo) + '&filterBy='+JSON.stringify(filterValue))
-    return fetch(`${process.env.REACT_APP_API_URL}products` + '?skip='+skip + '&limit='+limit+ '&filterBy='+JSON.stringify(filterValue) + (sortInfo ? '&keyword='+JSON.stringify(sortInfo) : '')).then(response => {
-      return response.json().then(data => {
-        dispatch({ type: types.productTypes.PRODUCT_LIST_SUCCESS, payload : data });
-        return { data: data.products , count: parseInt(data.count),  };
-      })
-    })
-  }
-  const loadData2 = ({ skip, limit, sortInfo }) => async () => {
-    console.log(sortInfo+'sort')
-    await dispatch(listProducts(skip,limit))
-    
-    /* return fetch(`${process.env.REACT_APP_API_URL}products` + '?skip='+skip + '&limit='+limit+(sortInfo ? '&keyword='+JSON.stringify(sortInfo) : '')).then(response => {
-      return response.json().then(data => {
-        return { data: data.products , count: parseInt(data.count),  };
-      })
-    }) */
-    return { data: products.products , count: products.count,  };
-  }
-  const dataSource = useCallback(loadData, [])
-  
 
     useEffect(() => {
         dispatch({ type: types.productTypes.PRODUCT_CREATE_RESET })
@@ -95,7 +38,7 @@ const UserListScreen = ({ history }) => {
         if( successCreate) {
             history.push(`/admin/product/${createdProduct._id}/edit`)
         }else {
-            dispatch(listProducts())
+            dispatch(listProducts(products.page))
         }
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, productDelete ])
 
@@ -109,6 +52,10 @@ const UserListScreen = ({ history }) => {
         dispatch(createProduct())
     }
 
+    const handlePagination = ( e, value ) => {
+        dispatch(listProducts(value))
+    }
+
   return (
     <>
 
@@ -116,12 +63,16 @@ const UserListScreen = ({ history }) => {
             <Col>
                 <h1>Products</h1>
             </Col>
+            <Col>
+                <ModalS >are you sure?</ModalS>
+            </Col>
             <Col className='text-right'>
                 <Button className='my-3' onClick={createProductHandler}>
                     <i className='fas fa-plus'></i> Create Product
                 </Button>
             </Col>
         </Row>
+        
         {loadingDelete && <Loader />}
         {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
         {loadingCreate && <Loader />}
@@ -131,58 +82,60 @@ const UserListScreen = ({ history }) => {
         ) : error ? (
             <Message variant='danger'>{error}</Message>
         ) : (
+            <>
             <Table striped bordered hover responsive className='table-sm'>
-            <thead>
-                <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {products.products.map((product) => (
-                <tr key={product._id}>
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-                    <td>${product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
-                
-                    <td>
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>PRICE</th>
+                    <th>CATEGORY</th>
+                    <th>BRAND</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {products.products.map((product) => (
+                    <tr key={product._id}>
+                        <td>{product._id}</td>
+                        <td>{product.name}</td>
+                        <td>${product.price}</td>
+                        <td>{product.category}</td>
+                        <td>{product.brand}</td>
+                    
+                        <td>
 
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                        <Button variant='light' className='btn-sm'>
-                        <i className='fas fa-edit'></i>
+                        <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                            <Button variant='light' className='btn-sm'>
+                            <i className='fas fa-edit'></i>
+                            </Button>
+                        </LinkContainer>
+
+                        <Button
+                            variant='danger'
+                            className='btn-sm'
+                            onClick={() => deleteHandler(product._id)}
+                        /*  onClick={() => {
+                                dispatch(ShowModal({
+                                    title: `delete item ${product.name}`,
+                                    description: 'are you sure?',
+                                    variantPrimary : "danger",
+                                    variantSecondary : 'info',
+                                    status : true,
+                                    data : product._id ,
+                                    onButtonClick: deleteHandlerModal(product._id) 
+                                }));
+                            }} */
+                        >
+                            <i className='fas fa-trash'></i>
                         </Button>
-                    </LinkContainer>
-
-                    <Button
-                        variant='danger'
-                        className='btn-sm'
-                        onClick={() => deleteHandler(product._id)}
-                    >
-                        <i className='fas fa-trash'></i>
-                    </Button>
-                    </td>
-                </tr>
-                ))}
-            </tbody>
+                        </td>
+                    </tr>
+                    ))}
+                </tbody>
             </Table>
-            /* <ReactDataGrid
-                idProperty="id"
-                style={gridStyle}
-                columns={columns}
-                pagination="remote"
-                defaultLimit={10}
-                defaultSkip={0}
-                pageSizes={[5, 10, 15, 30]}
-                dataSource={dataSource}
-                defaultFilterValue={filterValue}
-                loading={loading}
-            /> */
+            <Pagination count={products.pages} page={products.page} onChange={handlePagination} />
+            </>
          )}
     </>
   )

@@ -27,6 +27,9 @@ import {
     ordersListMyReducer,
     orderListReducer
 } from "../reducers/orderReducers";
+import { 
+    modalReducer,
+} from "../reducers/modalReducers";
 
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
@@ -50,6 +53,7 @@ const reducers = combineReducers({
     orderPay : orderPayReducer,
     orderMyList : ordersListMyReducer,
     orderList : orderListReducer,
+    modalDetails : modalReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []

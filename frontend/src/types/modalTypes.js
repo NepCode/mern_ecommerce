@@ -1,0 +1,8 @@
+
+export const modalTypes = {
+
+    SHOW_MODAL: '[MODAL] SHOW_MODAL',
+    HIDE_MODAL: '[MODAL] HIDE_MODAL',
+    OPTION_BUTTON_MODAL: '[MODAL] OPTION_BUTTON_MODAL',
+
+}
