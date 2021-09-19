@@ -2,13 +2,13 @@ import { types } from "../types/types";
 import axios from "axios";
 import { logout } from "./userActions";
 
-export const listProducts = (skip,limit) => {
+export const listProducts = (pageNumber, pageSize = 5) => {
   
     return async ( dispatch ) => {
        
         try {
             dispatch({  type: types.productTypes.PRODUCT_LIST_REQUEST });
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products` + '?skip='+skip + '&limit='+limit)
+            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products` + '?pageNumber='+pageNumber + '&pageSize='+pageSize)
             //const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products` + '?skip='+skip + '&limit='+limit+ '&filterBy='+JSON.stringify(filterValue) + (sortInfo ? '&keyword='+JSON.stringify(sortInfo) : ''))
             dispatch({ type: types.productTypes.PRODUCT_LIST_SUCCESS, payload : data });
         } catch (e) {

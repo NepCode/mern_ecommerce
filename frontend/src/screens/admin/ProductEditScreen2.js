@@ -15,16 +15,14 @@ const ProductEditScreen = ({ match, history }) => {
     
     const productId = match.params.id
   
+    const [name, setName] = useState('')
+    const [price, setPrice] = useState(0)
+    const [image, setImage] = useState('')
+    const [brand, setBrand] = useState('')
+    const [category, setCategory] = useState('')
+    const [countInStock, setCountInStock] = useState(0)
+    const [description, setDescription] = useState('')
     const [uploading, setUploading] = useState(false)
-    const [editProduct, setEditProduct] = useState({
-      name : '',
-      price : 0,
-      image : '',
-      brand : '',
-      category : '',
-      countInStock : '0',
-      description : ''
-    })
   
     const dispatch = useDispatch()
   
@@ -47,16 +45,13 @@ const ProductEditScreen = ({ match, history }) => {
                   if (!product.name || product._id !== productId) {
                     dispatch(listProductDetails(productId))
                   } else {
-                    setEditProduct( prev => ({
-                      ...prev,
-                      name : product.name,
-                      price : product.price,
-                      image : product.image,
-                      brand : product.brand,
-                      category : product.category,
-                      countInStock : product.countInStock,
-                      description : product.description 
-                    }))
+                    setName(product.name)
+                    setPrice(product.price)
+                    setImage(product.image)
+                    setBrand(product.brand)
+                    setCategory(product.category)
+                    setCountInStock(product.countInStock)
+                    setDescription(product.description)
                   }
               }
         } else {
@@ -80,12 +75,7 @@ const ProductEditScreen = ({ match, history }) => {
     
           const { data } = await axios.post('/api/upload', formData, config)
     
-          //setImage(data)
-          setEditProduct( prev => ({
-            ...prev,
-            image : data 
-          }))
-
+          setImage(data)
           setUploading(false)
         } catch (error) {
           console.error(error)
@@ -93,35 +83,26 @@ const ProductEditScreen = ({ match, history }) => {
         }
     }
 
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setEditProduct( prev => ({
-        ...prev,
-        [name] : value
-      }))
-    }
-
     
     const submitHandler = (e) => {
         e.preventDefault()
-        console.log(editProduct)
         dispatch(
           updateProduct({
             _id: productId,
-            name : editProduct.name,
-            price : editProduct.price,
-            image : editProduct.image,
-            brand : editProduct.brand,
-            category : editProduct.category,
-            description : editProduct.description,
-            countInStock : editProduct.countInStock,
+            name,
+            price,
+            image,
+            brand,
+            category,
+            description,
+            countInStock,
           })
         )
     }
   
     return (
         <>
-          <Link to='/productsList' className='btn btn-light my-3'>
+          <Link to='/admin/productlist' className='btn btn-light my-3'>
             Go Back
           </Link>
           <FormContainer>
@@ -137,33 +118,30 @@ const ProductEditScreen = ({ match, history }) => {
                 <Form.Group controlId='name'>
                   <Form.Label>Name</Form.Label>
                   <Form.Control
-                    name='name'
                     type='name'
                     placeholder='Enter name'
-                    value={editProduct.name}
-                    onChange={handleInputChange}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
                 <Form.Group controlId='price'>
                   <Form.Label>Price</Form.Label>
                   <Form.Control
-                    name='price'
                     type='number'
                     placeholder='Enter price'
-                    value={editProduct.price}
-                    onChange={handleInputChange}
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
                 <Form.Group controlId='image'>
                   <Form.Label>Image</Form.Label>
                   <Form.Control
-                    name='image'
                     type='text'
                     placeholder='Enter image url'
-                    value={editProduct.image}
-                    onChange={handleInputChange}
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
                   ></Form.Control>
                   <Form.File
                     id='image-file'
@@ -177,44 +155,40 @@ const ProductEditScreen = ({ match, history }) => {
                 <Form.Group controlId='brand'>
                   <Form.Label>Brand</Form.Label>
                   <Form.Control
-                    name='brand'
                     type='text'
                     placeholder='Enter brand'
-                    value={editProduct.brand}
-                    onChange={handleInputChange}
+                    value={brand}
+                    onChange={(e) => setBrand(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
                 <Form.Group controlId='countInStock'>
                   <Form.Label>Count In Stock</Form.Label>
                   <Form.Control
-                    name='countInStock'
                     type='number'
                     placeholder='Enter countInStock'
-                    value={editProduct.countInStock}
-                    onChange={handleInputChange}
+                    value={countInStock}
+                    onChange={(e) => setCountInStock(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
                 <Form.Group controlId='category'>
                   <Form.Label>Category</Form.Label>
                   <Form.Control
-                    name='category'
                     type='text'
                     placeholder='Enter category'
-                    value={editProduct.category}
-                    onChange={handleInputChange}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
                 <Form.Group controlId='description'>
                   <Form.Label>Description</Form.Label>
                   <Form.Control
-                    name='description'
                     type='text'
                     placeholder='Enter description'
-                    value={editProduct.description}
-                    onChange={handleInputChange}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
     
