@@ -1,4 +1,4 @@
-import React from 'react'
+/* import React from 'react' */
 import { types } from "../types/types";
 
 const initialState = {

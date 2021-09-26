@@ -129,7 +129,7 @@ export const updateUserProfile = ( user ) => async ( dispatch, getState ) => {
 
 }
 
-export const listUsers = (  ) => async ( dispatch, getState ) => {
+export const listUsers = ( pageNumber, pageSize ) => async ( dispatch, getState ) => {
        
     try {
         dispatch({  type: types.userTypes.USER_LIST_REQUEST});
@@ -140,7 +140,7 @@ export const listUsers = (  ) => async ( dispatch, getState ) => {
                  Authorization: `Bearer ${userInfo.token}`,
             }
         }
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}users/`, config )
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}users?pageNumber=${pageNumber}&pageSize=${pageSize}`, config )
         dispatch({ type: types.userTypes.USER_LIST_SUCCESS , payload : data });
     } catch (e) {
 

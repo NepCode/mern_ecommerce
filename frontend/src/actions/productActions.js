@@ -8,7 +8,7 @@ export const listProducts = (pageNumber, pageSize = 5) => {
        
         try {
             dispatch({  type: types.productTypes.PRODUCT_LIST_REQUEST });
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products` + '?pageNumber='+pageNumber + '&pageSize='+pageSize)
+            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products?pageNumber=${pageNumber}&pageSize=${pageSize}`)
             //const { data } = await axios.get(`${process.env.REACT_APP_API_URL}products` + '?skip='+skip + '&limit='+limit+ '&filterBy='+JSON.stringify(filterValue) + (sortInfo ? '&keyword='+JSON.stringify(sortInfo) : ''))
             dispatch({ type: types.productTypes.PRODUCT_LIST_SUCCESS, payload : data });
         } catch (e) {

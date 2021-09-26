@@ -118,7 +118,7 @@ export const payOrder = ( orderId, paymentResult ) => async ( dispatch, getState
 
 
 
-export const getMyOrders = (  ) => async ( dispatch, getState ) => {
+export const getMyOrders = ( pageNumber, pageSize = 10 ) => async ( dispatch, getState ) => {
     
     try {
         dispatch({  type: types.orderTypes.ORDER_LIST_MY_ORDERS_REQUEST });
@@ -132,7 +132,7 @@ export const getMyOrders = (  ) => async ( dispatch, getState ) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders/myorders`, config )
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders/myorders?pageNumber=${pageNumber}&pageSize=${pageSize}`, config )
         dispatch({ type: types.orderTypes.ORDER_LIST_MY_ORDERS_SUCCESS , payload : data });
 
     } catch (e) {
@@ -155,7 +155,7 @@ export const getMyOrders = (  ) => async ( dispatch, getState ) => {
 
 
 
-export const listOrders = (  ) => async ( dispatch, getState ) => {
+export const listOrders = ( pageNumber, pageSize  ) => async ( dispatch, getState ) => {
     
     try {
         dispatch({  type: types.orderTypes.ORDER_LIST_REQUEST });
@@ -169,7 +169,7 @@ export const listOrders = (  ) => async ( dispatch, getState ) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders`, config )
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}orders?pageNumber=${pageNumber}&pageSize=${pageSize}`, config )
         dispatch({ type: types.orderTypes.ORDER_LIST_SUCCESS , payload : data });
 
     } catch (e) {
@@ -183,6 +183,43 @@ export const listOrders = (  ) => async ( dispatch, getState ) => {
         }
         dispatch({
             type: types.orderTypes.ORDER_LIST_FAIL,
+            payload: message,
+        })
+    }
+
+}
+
+
+
+export const updateOrder = ( order ) => async ( dispatch, getState ) => {
+    
+    try {
+        dispatch({  type: types.orderTypes.ORDER_PAY_REQUEST });
+
+        const {
+            userLogin: { userInfo }
+        } = getState();
+
+        const config = {
+            headers : {
+                'Content-Type' : 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.put(`${process.env.REACT_APP_API_URL}orders/${order._id}` , order, config )
+        dispatch({ type: types.orderTypes.ORDER_PAY_SUCCESS , payload : data });
+
+    } catch (e) {
+
+        const message =
+            e.response && e.response.data.message
+            ? e.response.data.message
+            : e.message
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout())
+        }
+        dispatch({
+            type: types.orderTypes.ORDER_PAY_FAIL,
             payload: message,
         })
     }

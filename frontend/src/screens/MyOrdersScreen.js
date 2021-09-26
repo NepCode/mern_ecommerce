@@ -14,7 +14,7 @@ import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { getMyOrders } from '../actions/orderActions'
 import { types } from "../types/types";
 
-
+import Pagination from "@material-ui/lab/Pagination";
 
 
 
@@ -33,7 +33,6 @@ const MyOrdersScreen = ({ location, history }) => {
     
     const orderMyList  = useSelector((state) => state.orderMyList)
     const { loading : loadingMyOrders, error : errorMyOrders, orders } = orderMyList 
-
 
     const [registerFormValues, handleInputChange, setInputValues ] = useForm({
         name: '',
@@ -79,6 +78,10 @@ const MyOrdersScreen = ({ location, history }) => {
         }
         // eslint-disable-next-line
     }, [ dispatch, history, userInfo, user, success])
+
+    const handlePagination = ( e, value ) => {
+        dispatch(getMyOrders(value))
+    }
 
 
     return (
@@ -154,7 +157,7 @@ const MyOrdersScreen = ({ location, history }) => {
             <Col md={9}>
                 <h2>My Orders</h2>
                 { loadingMyOrders ? <Loader/> : errorMyOrders ? <Message variant='danger'> {errorMyOrders} </Message> :  (
-
+                     <>
                     <Table striped bordered hover responsive className='table-sm'>
                         <thead>
                             <tr>
@@ -199,6 +202,8 @@ const MyOrdersScreen = ({ location, history }) => {
                             ))}
                         </tbody>
                     </Table>
+                    <Pagination count={orders.pages} page={orders.page} onChange={handlePagination} />
+                    </>
                 ) }
             </Col>
         </Row>
