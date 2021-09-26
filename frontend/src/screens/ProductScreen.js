@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Button, Form } from "react-bootstrap";
 import { Rating } from '../components/Rating';
-import { Product } from '../components/Product';
+//import { Product } from '../components/Product';
 //import products from '../products';
 //import { useFetch } from '../hooks/useFetch'
 import { Loader } from '../components/Loader';

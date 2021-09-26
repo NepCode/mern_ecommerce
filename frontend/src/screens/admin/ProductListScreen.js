@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +6,6 @@ import {Message} from '../../components/Message'
 import {ModalS} from '../../components/Modal'
 import {Loader} from '../../components/Loader'
 import { listProducts, deleteProduct, createProduct } from '../../actions/productActions'
-import { ShowModal, HideModal } from '../../actions/modalActions'
 import { types } from "../../types/types";
 
 import Pagination from "@material-ui/lab/Pagination";
@@ -17,7 +16,6 @@ const UserListScreen = ({ history }) => {
 
   const productList = useSelector((state) => state.productList)
   const { loading, error, products } = productList
-  console.log(products)
 
   const productDelete = useSelector((state) => state.productDelete)
   const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
@@ -40,6 +38,7 @@ const UserListScreen = ({ history }) => {
         }else {
             dispatch(listProducts(products.page))
         }
+        
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, productDelete ])
 
     const deleteHandler = (id) => {

@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+
 import {Message} from '../../components/Message'
 import {Loader} from '../../components/Loader'
+import Pagination from "@material-ui/lab/Pagination";
+
 import { listUsers, deleteUser } from '../../actions/userActions'
+
 
 const UserListScreen = ({ history }) => {
 
@@ -33,6 +39,10 @@ const UserListScreen = ({ history }) => {
     }
   }
 
+  const handlePagination = ( e, value ) => {
+    dispatch(listUsers(value))
+  }
+
   return (
     <>
       <h1>Users</h1>
@@ -41,6 +51,7 @@ const UserListScreen = ({ history }) => {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
+        <>
         <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
@@ -85,6 +96,8 @@ const UserListScreen = ({ history }) => {
             ))}
           </tbody>
         </Table>
+        <Pagination count={users.pages} page={users.page} onChange={handlePagination} />
+        </>
       )}
     </>
   )
