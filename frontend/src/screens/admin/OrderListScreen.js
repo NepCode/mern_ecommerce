@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import {Message} from '../../components/Message'
 import {Loader} from '../../components/Loader'
 import { listOrders } from '../../actions/orderActions'
-import { types } from "../../types/types";
+//import { types } from "../../types/types";
+import Pagination from "@material-ui/lab/Pagination";
+
 
 const UserListScreen = ({ history }) => {
 
@@ -50,6 +52,10 @@ const UserListScreen = ({ history }) => {
         dispatch(createProduct())
     } */
 
+    const handlePagination = ( e, value ) => {
+        dispatch(listOrders(value))
+    }
+
   return (
     <>
 
@@ -72,6 +78,7 @@ const UserListScreen = ({ history }) => {
         ) : error ? (
             <Message variant='danger'>{error}</Message>
         ) : (
+            <>
             <Table striped bordered hover responsive className='table-sm'>
                 <thead>
                     <tr>
@@ -105,7 +112,8 @@ const UserListScreen = ({ history }) => {
                             </td>
 
                             <td>
-                                <LinkContainer to={`/order/${order._id}`}>
+                                {/* <LinkContainer to={`/order/${order._id}`}> */}
+                                <LinkContainer to={`/admin/order/${order._id}/edit`}>
                                 <Button className='btn-sm' variant='light'>
                                     Details
                                 </Button>
@@ -116,6 +124,8 @@ const UserListScreen = ({ history }) => {
                     ))}
                 </tbody>
             </Table>
+            <Pagination count={orders.pages} page={orders.page} onChange={handlePagination} />
+            </>
         )}
     </>
   )

@@ -5,7 +5,7 @@ import Order from '../models/orderModel.js'
 // @route   GET /api/v1/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const pageSize = 10
+  const pageSize = Number(req.query.pageSize) || 10
   const page = Number(req.query.pageNumber) || 1
 
   const count = await Order.countDocuments()
@@ -21,11 +21,11 @@ const getOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/orders/myorders
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
-  const pageSize = 10
-
+  
+  const pageSize = Number(req.query.pageSize) || 10
   const page = Number(req.query.pageNumber) || 1
 
-  const count = await Order.countDocuments()
+  const count = await Order.countDocuments({ user: req.user.id })
   const orders = await Order.find({ user: req.user.id })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
@@ -81,33 +81,18 @@ const createOrder = asyncHandler(async (req, res) => {
 // @route   PUT /api/v1/orders/:id
 // @access  Private/Admin
 const updateOrder = asyncHandler(async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body
 
-  const product = await Product.findById(req.params.id)
+  const order = await Order.findById(req.params.id).populate('user', 'name email')
 
-  if (product) {
-    product.name = name
-    product.price = price
-    product.description = description
-    product.image = image
-    product.brand = brand
-    product.category = category
-    product.countInStock = countInStock
-
-    const updatedProduct = await product.save()
-    res.json(updatedProduct)
-  } else {
+  if(!order) {
     res.status(404)
-    throw new Error('Product not found')
+    throw new Error('Order not found')
   }
+
+  order.set(req.body);
+  const updatedProduct = await order.save();
+  return res.json(updatedProduct)
+  
 })
 
 // @desc    Delete a order

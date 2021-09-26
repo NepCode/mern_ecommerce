@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { ShowModal, HideModal, OPTION_BUTTON_MODAL } from '../actions/modalActions'
+import { HideModal } from '../actions/modalActions'
 import { deleteProduct } from '../actions/productActions'
 
 
